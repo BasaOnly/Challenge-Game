@@ -9,9 +9,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CharacterController controler;
    
     [Header("Animation")]
-    [SerializeField] Animator animPlayer;
+    public Animator animPlayer;
     [SerializeField] float smoothAnimation;
-    public bool run;
+    [SerializeField] bool run;
     float animMovementValue;
 
     [Header("Movimento")]
@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float rotationSpeed = 0.2f;
     float velocity;
     Vector3 gravity;
+    bool canMove;
 
     [Header("CheckGround")]
     [SerializeField] Transform positionCheck;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     float horizontal;
     float vertical;
     Camera cam;
+
     private void Awake()
     {
         cam = Camera.main;
@@ -38,12 +40,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        GetAnimVariables();
         CheckGround();
-        LocomotionRotation();
-        Move();
+        if (canMove)
+        {
+            LocomotionRotation();
+            Move();
+        }
         MoveAnimator();
     }
 
+    #region movement
     void Move()
     {
         velocity = movementSpeed * GetInputVector().magnitude;
@@ -74,16 +81,26 @@ public class PlayerController : MonoBehaviour
         direction.y = 0;
         transform.forward = Vector3.Slerp(transform.forward, direction, Time.deltaTime * rotationSpeed);
     }
+  
+    Vector3 GetInputVector()
+    {
+       return new Vector3(vertical, 0, horizontal).normalized;
+    }
+    #endregion
+
+    #region animation
     void MoveAnimator()
     {
         animMovementValue = Mathf.Clamp(Mathf.Lerp(animMovementValue, velocity, Time.deltaTime * smoothAnimation), 0, 9);
         animPlayer.SetFloat("speed", animMovementValue);
     }
 
-    Vector3 GetInputVector()
+    void GetAnimVariables()
     {
-       return new Vector3(vertical, 0, horizontal).normalized;
+        canMove = animPlayer.GetBool("canMove");
     }
+    #endregion
+
     #region inputSystem
     public void OnMoveInput(float vertical, float horizontal)
     {
@@ -91,10 +108,7 @@ public class PlayerController : MonoBehaviour
         this.horizontal = horizontal;
     }
 
-    public void OnAttack()
-    {
-        Debug.Log("Ataque");
-    }
+    
 
     public void OnJump()
     {

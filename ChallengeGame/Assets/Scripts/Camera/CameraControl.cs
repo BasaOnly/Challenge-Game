@@ -19,7 +19,6 @@ public class CameraControl : MonoBehaviour
 
     [Header("Distance")]
     [SerializeField] float playerDistance;
-    [SerializeField] float zoom;
     [SerializeField] float minDistance, maxDistance;
 
     [Header("Collider")]
@@ -64,7 +63,7 @@ public class CameraControl : MonoBehaviour
         x += (mouseX * rotationSensitivity);
         y = ClampAngle(y - mouseY * rotationSensitivity, minLimit, maxLimit);
 
-        targetDistance = Mathf.Clamp(targetDistance /*+ ZoomAdd*/, minDistance, maxDistance);
+        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
     }
 
     void CameraMovement()
@@ -92,18 +91,6 @@ public class CameraControl : MonoBehaviour
     #endregion
 
     #region utility
-    /*
-    float ZoomAdd
-    {
-        get
-        {
-            float scrollAxis = Input.GetAxis("Mouse ScrollWheel");
-            if (scrollAxis > 0) return -zoom;
-            if (scrollAxis < 0) return zoom;
-            return 0;
-        }
-    }*/
-
     float ClampAngle(float angle, float min, float max)
     {
         return Mathf.Clamp(angle, min, max);
