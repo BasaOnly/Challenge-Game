@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
     public static InputManager instance;
     public VectorEvent[] vectorEvent;
     public OnTriggerEvent[] triggerEvents;
+    public OnTriggerBoolEvent[] triggerBoolEvents;
     PlayerActions playerActions;
  
 
@@ -23,6 +24,8 @@ public class InputManager : MonoBehaviour
 
         playerActions.PlayerControls.Jump.performed += OnJump;
         playerActions.PlayerControls.Attack.performed += OnAttack;
+        playerActions.PlayerControls.Run.performed += OnRun;
+        playerActions.PlayerControls.Run.canceled += OnRun;
         playerActions.PlayerControls.Movement.performed += OnMovement;
         playerActions.PlayerControls.Movement.canceled += OnMovement;
         playerActions.PlayerControls.Camera.performed += OnCameraRotation;
@@ -36,6 +39,11 @@ public class InputManager : MonoBehaviour
         Vector2 inputMovement = value.ReadValue<Vector2>();
         vectorEvent[0].Invoke(inputMovement.x, inputMovement.y);
     }
+    public void OnCameraRotation(InputAction.CallbackContext value)
+    {
+        Vector2 inputMouseRotation = value.ReadValue<Vector2>();
+        vectorEvent[1].Invoke(inputMouseRotation.x, inputMouseRotation.y);
+    }
 
     public void OnAttack(InputAction.CallbackContext value)
     {
@@ -47,18 +55,12 @@ public class InputManager : MonoBehaviour
         triggerEvents[1].Invoke();
     }
 
-    public void OnCameraRotation(InputAction.CallbackContext value)
+    public void OnRun(InputAction.CallbackContext value)
     {
-        Vector2 inputMouseRotation = value.ReadValue<Vector2>();
-        vectorEvent[1].Invoke(inputMouseRotation.x, inputMouseRotation.y);
+        triggerBoolEvents[0].Invoke(value.performed);
     }
 
     #endregion
 }
 
-//Evemts
-[Serializable]
-public class VectorEvent : UnityEvent<float, float> { }
 
-[Serializable]
-public class OnTriggerEvent : UnityEvent { }

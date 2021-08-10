@@ -13,6 +13,10 @@ public class CameraControl : MonoBehaviour
     [SerializeField] [Range(-30f, -10f)] float minLimit;
     [SerializeField] [Range(40f, 75f)] float maxLimit;
 
+    [Header("Position")]
+    [SerializeField] [Range(0.01f, 0.5f)] float positionSensitivity;
+    Vector3 refVelocity = Vector3.zero;
+
     [Header("Distance")]
     [SerializeField] float playerDistance;
     [SerializeField] float zoom;
@@ -47,6 +51,10 @@ public class CameraControl : MonoBehaviour
     {
         UpdateInput();
         RaycastCamera();
+    }
+
+    private void LateUpdate()
+    {
         CameraMovement();
     }
 
@@ -65,8 +73,9 @@ public class CameraControl : MonoBehaviour
         t = target.position + rotation * offSet;
         f = rotation * -Vector3.forward;
         position = t + f * playerDistance;
-        transform.position = position;
-        transform.rotation = rotation;
+        Vector3 suavizaPos = Vector3.SmoothDamp(transform.position, position, ref refVelocity, positionSensitivity);
+        transform.position = suavizaPos;
+        transform.LookAt(t);
     }
 
     void RaycastCamera()
