@@ -57,6 +57,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SkillChange"",
+                    ""type"": ""Button"",
+                    ""id"": ""47d570d4-cc1e-438d-9745-524e24dde0c3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -213,6 +221,28 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""350cac09-50e5-4f0d-b643-75b873275d8d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SkillChange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50472fd3-dbc1-429f-ae2a-e4348ef2ea47"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SkillChange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -237,6 +267,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         m_PlayerControls_Camera = m_PlayerControls.FindAction("Camera", throwIfNotFound: true);
         m_PlayerControls_Jump = m_PlayerControls.FindAction("Jump", throwIfNotFound: true);
         m_PlayerControls_Run = m_PlayerControls.FindAction("Run", throwIfNotFound: true);
+        m_PlayerControls_SkillChange = m_PlayerControls.FindAction("SkillChange", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -291,6 +322,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Camera;
     private readonly InputAction m_PlayerControls_Jump;
     private readonly InputAction m_PlayerControls_Run;
+    private readonly InputAction m_PlayerControls_SkillChange;
     public struct PlayerControlsActions
     {
         private @PlayerActions m_Wrapper;
@@ -300,6 +332,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         public InputAction @Camera => m_Wrapper.m_PlayerControls_Camera;
         public InputAction @Jump => m_Wrapper.m_PlayerControls_Jump;
         public InputAction @Run => m_Wrapper.m_PlayerControls_Run;
+        public InputAction @SkillChange => m_Wrapper.m_PlayerControls_SkillChange;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -324,6 +357,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Run.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnRun;
                 @Run.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnRun;
                 @Run.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnRun;
+                @SkillChange.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSkillChange;
+                @SkillChange.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSkillChange;
+                @SkillChange.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSkillChange;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -343,6 +379,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @SkillChange.started += instance.OnSkillChange;
+                @SkillChange.performed += instance.OnSkillChange;
+                @SkillChange.canceled += instance.OnSkillChange;
             }
         }
     }
@@ -372,5 +411,6 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         void OnCamera(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnSkillChange(InputAction.CallbackContext context);
     }
 }

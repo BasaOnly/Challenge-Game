@@ -19,7 +19,6 @@ public class CameraControl : MonoBehaviour
 
     [Header("Distance")]
     [SerializeField] float playerDistance;
-    [SerializeField] float minDistance, maxDistance;
 
     [Header("Collider")]
     [SerializeField] LayerMask colliderLayer;
@@ -62,10 +61,7 @@ public class CameraControl : MonoBehaviour
     {
         x += (mouseX * rotationSensitivity);
         y = ClampAngle(y - mouseY * rotationSensitivity, minLimit, maxLimit);
-
-        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
     }
-
     void CameraMovement()
     {
         rotation = Quaternion.AngleAxis(x, Vector3.up) * Quaternion.AngleAxis(y, Vector3.right);

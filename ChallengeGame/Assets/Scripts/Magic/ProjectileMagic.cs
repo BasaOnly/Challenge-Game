@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class MagicBehaviour : MonoBehaviour
+public class ProjectileMagic : MonoBehaviour
 {
     [SerializeField] float forceVelocity;
     [SerializeField] ParticleSystem explosionEffect;

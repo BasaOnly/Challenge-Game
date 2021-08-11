@@ -108,8 +108,6 @@ public class PlayerController : MonoBehaviour
         this.horizontal = horizontal;
     }
 
-    
-
     public void OnJump()
     {
         Debug.Log("Jump");

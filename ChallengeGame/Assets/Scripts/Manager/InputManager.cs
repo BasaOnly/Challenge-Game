@@ -24,6 +24,7 @@ public class InputManager : MonoBehaviour
 
         playerActions.PlayerControls.Jump.performed += OnJump;
         playerActions.PlayerControls.Attack.performed += OnAttack;
+        playerActions.PlayerControls.SkillChange.performed += OnSkillChange;
         playerActions.PlayerControls.Run.performed += OnRun;
         playerActions.PlayerControls.Run.canceled += OnRun;
         playerActions.PlayerControls.Movement.performed += OnMovement;
@@ -55,10 +56,15 @@ public class InputManager : MonoBehaviour
         triggerEvents[1].Invoke();
     }
 
+    public void OnSkillChange(InputAction.CallbackContext value)
+    {
+        triggerEvents[2].Invoke();
+    }
     public void OnRun(InputAction.CallbackContext value)
     {
         triggerBoolEvents[0].Invoke(value.performed);
     }
+
 
     #endregion
 }
