@@ -4,23 +4,18 @@ using UnityEngine;
 
 public class InstantaneousMagic : MonoBehaviour
 {
+    [SerializeField] float damage;
     [SerializeField] GameObject particleFX;
-    [SerializeField] float groundDistance;
-    [SerializeField] float distanceMagic;
-    [SerializeField] LayerMask enemyLayer;
-    void Start()
+
+    public void SetData(Transform enemy)
     {
-        if(Physics.SphereCast(this.transform.position, 1f, this.transform.forward, out RaycastHit hit, distanceMagic, enemyLayer))
+        if (enemy != null)
         {
-            float yHalfExtents = hit.collider.bounds.extents.y;
-            float yLower = (hit.transform.position.y + groundDistance) - yHalfExtents;
-            this.transform.position = new Vector3(hit.transform.position.x, yLower, hit.transform.transform.position.z);
+            enemy.transform.GetComponent<Enemy>().TakeDamage(damage, this.gameObject);
             particleFX.SetActive(true);
-            Destroy(this.gameObject, 4);
         }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+
+        Destroy(this.gameObject, 4);
     }
+
 }

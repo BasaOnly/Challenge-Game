@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0cc22292b504582899882a1c6333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 50
   forceVelocity: 500
   explosionEffect: {fileID: 682459463509148778, guid: ae323253a4dd8f34782b64d0ee78e412, type: 3}
   rig: {fileID: 1344332076055260543}

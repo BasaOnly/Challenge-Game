@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ProjectileMagic : MonoBehaviour
 {
+    [SerializeField] float damage;
     [SerializeField] float forceVelocity;
     [SerializeField] ParticleSystem explosionEffect;
     [SerializeField] Rigidbody rig;
@@ -14,6 +15,9 @@ public class ProjectileMagic : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(collision.transform.CompareTag("Enemy"))
+            collision.transform.GetComponent<Enemy>().TakeDamage(damage);
+      
         Explode();
     }
 

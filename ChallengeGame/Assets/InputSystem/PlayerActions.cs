@@ -65,6 +65,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Defend"",
+                    ""type"": ""Button"",
+                    ""id"": ""77f89ff5-1229-491e-b0af-6a7ab84dad44"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -243,6 +251,28 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""SkillChange"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa7eb251-e549-4d9f-bff5-d051052b11f7"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Defend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e641c3a9-43d5-4034-a318-513199ea21a0"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Defend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -268,6 +298,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         m_PlayerControls_Jump = m_PlayerControls.FindAction("Jump", throwIfNotFound: true);
         m_PlayerControls_Run = m_PlayerControls.FindAction("Run", throwIfNotFound: true);
         m_PlayerControls_SkillChange = m_PlayerControls.FindAction("SkillChange", throwIfNotFound: true);
+        m_PlayerControls_Defend = m_PlayerControls.FindAction("Defend", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -323,6 +354,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Jump;
     private readonly InputAction m_PlayerControls_Run;
     private readonly InputAction m_PlayerControls_SkillChange;
+    private readonly InputAction m_PlayerControls_Defend;
     public struct PlayerControlsActions
     {
         private @PlayerActions m_Wrapper;
@@ -333,6 +365,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerControls_Jump;
         public InputAction @Run => m_Wrapper.m_PlayerControls_Run;
         public InputAction @SkillChange => m_Wrapper.m_PlayerControls_SkillChange;
+        public InputAction @Defend => m_Wrapper.m_PlayerControls_Defend;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -360,6 +393,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @SkillChange.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSkillChange;
                 @SkillChange.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSkillChange;
                 @SkillChange.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSkillChange;
+                @Defend.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnDefend;
+                @Defend.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnDefend;
+                @Defend.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnDefend;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -382,6 +418,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @SkillChange.started += instance.OnSkillChange;
                 @SkillChange.performed += instance.OnSkillChange;
                 @SkillChange.canceled += instance.OnSkillChange;
+                @Defend.started += instance.OnDefend;
+                @Defend.performed += instance.OnDefend;
+                @Defend.canceled += instance.OnDefend;
             }
         }
     }
@@ -412,5 +451,6 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnSkillChange(InputAction.CallbackContext context);
+        void OnDefend(InputAction.CallbackContext context);
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool onGround;
 
     Vector3 move;
-    Vector3 direction;
+    [HideInInspector] public Vector3 direction;
     float horizontal;
     float vertical;
     Camera cam;
@@ -44,13 +43,19 @@ public class PlayerController : MonoBehaviour
         CheckGround();
         if (canMove)
         {
-            LocomotionRotation();
-            Move();
+            SimpleMovement();
         }
+  
         MoveAnimator();
     }
 
     #region movement
+    void SimpleMovement()
+    {
+        LocomotionRotation();
+        Move();
+    }
+
     void Move()
     {
         velocity = movementSpeed * GetInputVector().magnitude;
@@ -86,6 +91,7 @@ public class PlayerController : MonoBehaviour
     {
        return new Vector3(vertical, 0, horizontal).normalized;
     }
+
     #endregion
 
     #region animation
