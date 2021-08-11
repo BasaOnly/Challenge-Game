@@ -13,8 +13,9 @@ public class CombatSystem : MonoBehaviour
     Camera cam;
 
     [Header("Magic")]
-    [SerializeField] GameObject[] magicPrefabs;
-    [SerializeField] LayerMask enemyLayer;
+    [SerializeField] GameObject[] attackPrefabs;
+    [SerializeField] GameObject defenseMagic;
+    [SerializeField] LayerMask ignoreLayer;
 
     [Header("RotationAttack")]
     [SerializeField] float rotationSpeed;
@@ -32,19 +33,25 @@ public class CombatSystem : MonoBehaviour
     #region input
     public void OnAttack()
     {
-        if (!animPlayer.GetBool("canMove")) return;
+        if (!scriptPlayer.canMove || scriptPlayer.defend) return;
         animPlayer.Play(animAttackName[indexMagic]);
         TargetFind();
         StartCoroutine(RotateToTarget());
     }
 
+    public void OnDefend(bool value)
+    {
+        if (scriptPlayer.canMove)
+        {
+            defenseMagic.SetActive(value);
+            animPlayer.SetBool("defend", value);
+        }
+    }
+
     public void OnSkillChange()
     {
-        if (!animPlayer.GetBool("canMove")) return;
-
         indexMagic++;
-
-        if (indexMagic >= magicPrefabs.Length)
+        if (indexMagic >= attackPrefabs.Length)
             indexMagic = 0;
     }
     #endregion
@@ -54,13 +61,13 @@ public class CombatSystem : MonoBehaviour
     {
         if (enemy == null) return;
 
-        GameObject magic = Instantiate(magicPrefabs[indexMagic], posSpawnMagic[indexMagic].position, Quaternion.identity);
+        GameObject magic = Instantiate(attackPrefabs[indexMagic], posSpawnMagic[indexMagic].position, Quaternion.identity);
         magic.GetComponent<InstantaneousMagic>().SetData(enemy);
     }
 
     void SpawnProjectileMagic()
     {
-        GameObject magic = Instantiate(magicPrefabs[indexMagic], posSpawnMagic[indexMagic].position, Quaternion.identity);
+        GameObject magic = Instantiate(attackPrefabs[indexMagic], posSpawnMagic[indexMagic].position, Quaternion.identity);
         magic.transform.forward = foward;
     }
     #endregion
@@ -102,5 +109,6 @@ public class CombatSystem : MonoBehaviour
             yield return null;
         }
     }
+
     #endregion
 }

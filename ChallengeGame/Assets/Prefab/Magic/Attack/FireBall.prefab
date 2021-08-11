@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6300649243251466508}
   - component: {fileID: 5722656886895987636}
   - component: {fileID: 1344332076055260543}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,9 +86,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6665240626484485627}
     m_Modifications:
+    - target: {fileID: 100000, guid: 1c20c7996d683754db1f0f62a361952c, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 1c20c7996d683754db1f0f62a361952c, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 1c20c7996d683754db1f0f62a361952c, type: 3}
       propertyPath: m_Name
       value: CFX4 Fire
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 1c20c7996d683754db1f0f62a361952c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 1c20c7996d683754db1f0f62a361952c, type: 3}
       propertyPath: m_RootOrder

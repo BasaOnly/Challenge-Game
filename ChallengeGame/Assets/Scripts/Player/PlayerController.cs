@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float rotationSpeed = 0.2f;
     float velocity;
     Vector3 gravity;
-    bool canMove;
+   
 
     [Header("CheckGround")]
     [SerializeField] Transform positionCheck;
@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
     Vector3 move;
     [HideInInspector] public Vector3 direction;
+    [HideInInspector] public bool canMove;
+    [HideInInspector] public bool defend;
+
     float horizontal;
     float vertical;
     Camera cam;
@@ -41,11 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         GetAnimVariables();
         CheckGround();
-        if (canMove)
-        {
-            SimpleMovement();
-        }
-  
+        if (canMove) SimpleMovement();
         MoveAnimator();
     }
 
@@ -104,6 +103,7 @@ public class PlayerController : MonoBehaviour
     void GetAnimVariables()
     {
         canMove = animPlayer.GetBool("canMove");
+        defend = animPlayer.GetBool("defend");
     }
     #endregion
 
@@ -114,16 +114,10 @@ public class PlayerController : MonoBehaviour
         this.horizontal = horizontal;
     }
 
-    public void OnJump()
-    {
-        Debug.Log("Jump");
-    }
-
     public void OnRun(bool value)
     {
         run = value;
     }
-
     #endregion
 
     #region gizmos
