@@ -14,6 +14,7 @@ public class CombatSystem : MonoBehaviour
 
     [Header("Magic")]
     [SerializeField] GameObject[] attackPrefabs;
+    [SerializeField] GameObject[] spearFX;
     [SerializeField] GameObject defenseMagic;
     [SerializeField] LayerMask ignoreLayer;
 
@@ -53,6 +54,15 @@ public class CombatSystem : MonoBehaviour
         indexMagic++;
         if (indexMagic >= attackPrefabs.Length)
             indexMagic = 0;
+
+        ChangeSpearFX();
+        UIManager.instance.ChangeSpriteSkill(indexMagic);
+    }
+
+    void ChangeSpearFX()
+    {
+        spearFX[0].SetActive(!spearFX[0].activeInHierarchy);
+        spearFX[1].SetActive(!spearFX[1].activeInHierarchy);
     }
     #endregion
 

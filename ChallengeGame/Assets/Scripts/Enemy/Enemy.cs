@@ -5,24 +5,19 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] Animator animEnemy;
+    public Animator animEnemy;
+    public Transform target;
     [SerializeField] Collider colEnemy;
-    [SerializeField] Transform target;
     [SerializeField] Transform instantaneousPosMagic;
 
     [Header("Status")]
     [SerializeField] float life;
 
     [Header("Variables")]
-    bool die;
-    
+    public bool die;
 
-    void Update()
-    {
-        if(!die)
-            transform.LookAt(target);
-    }
 
+    #region combat
     public void TakeDamage(float damage, GameObject instantaneousMagic = null)
     {
         life -= damage;
@@ -38,4 +33,5 @@ public class Enemy : MonoBehaviour
         }
 
     }
+    #endregion
 }
