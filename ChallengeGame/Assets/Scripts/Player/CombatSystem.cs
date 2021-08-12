@@ -58,18 +58,12 @@ public class CombatSystem : MonoBehaviour
         if (indexMagic >= attackPrefabs.Length)
             indexMagic = 0;
 
-        ChangeSpearFX();
+   
         UIManager.instance.ChangeSpriteSkill(indexMagic);
-    }
-
-    void ChangeSpearFX()
-    {
-        spearFX[0].SetActive(!spearFX[0].activeInHierarchy);
-        spearFX[1].SetActive(!spearFX[1].activeInHierarchy);
     }
     #endregion
 
-    #region magic
+    #region callAnimation
     void SpawnInstantaneousMagic()
     {
         if (enemy == null) return;
@@ -93,6 +87,7 @@ public class CombatSystem : MonoBehaviour
         camPosFoward = cam.transform.forward;
         camPosFoward.y = 0;
         foward = camPosFoward;
+       
         FieldOfView();
         if (enemy)
         {
@@ -117,7 +112,7 @@ public class CombatSystem : MonoBehaviour
                 {
                     float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                    if (!Physics.Raycast(camPos, directionToTarget, distanceToTarget, obstructionMask))
+                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                     {
                         enemy = target;
                         break;

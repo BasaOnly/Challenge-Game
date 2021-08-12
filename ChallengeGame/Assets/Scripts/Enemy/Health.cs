@@ -2,20 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Health : MonoBehaviour
 {
     [Header("Components")]
-    public Animator animEnemy;
-    public Transform target;
+    [SerializeField] Animator animEnemy;
+    [SerializeField] Transform target;
     [SerializeField] Collider colEnemy;
     [SerializeField] Transform instantaneousPosMagic;
 
     [Header("Status")]
     [SerializeField] float life;
-
-    [Header("Variables")]
     public bool die;
-
 
     #region combat
     public void TakeDamage(float damage, GameObject instantaneousMagic = null)
@@ -33,5 +30,6 @@ public class Enemy : MonoBehaviour
         }
 
     }
+    
     #endregion
 }

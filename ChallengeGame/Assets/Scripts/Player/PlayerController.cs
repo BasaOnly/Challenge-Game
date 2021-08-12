@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     void Move()
     {
         velocity = movementSpeed * GetInputVector().magnitude;
-        velocity = run ? velocity * 1.5f : velocity;
+        velocity = run ? velocity * 1.25f : velocity;
         move = direction * velocity;
         controler.Move((GravityCalculation() + move) * Time.deltaTime);
     }

@@ -3,32 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyPatrol : MonoBehaviour
+public class EnemyBehaviour : MonoBehaviour
 {
     [Header("Components")]
-    [HideInInspector] public Transform playerRef;
     [SerializeField] NavMeshAgent navMesh;
-    [SerializeField] Enemy enemyScript;
+    [SerializeField] Animator animEnemy;
+    [HideInInspector] public Transform playerRef;
+    [SerializeField] Health scriptHealth;
 
-
-    [Header("FieldOfView")]    
+    [Header("FieldOfView")]
     public float radius;
-    [Range(0,360)] public float angle;
+    [Range(0, 360)] public float angle;
     [SerializeField] LayerMask targetMask;
     [SerializeField] LayerMask obstructionMask;
     [HideInInspector] public bool canSeePlayer;
-  
+
     [Header("Patrol")]
     [SerializeField] PatrolControl scriptPatrol;
     [SerializeField] float rotateChaseSpeed;
     [SerializeField] int indexEnemy;
 
+    [Header("Fight")]
+    [SerializeField] float timeToCast;
+    [SerializeField] float weaponRange;
+
     Vector3 directionToTarget;
     Vector3 lastPointPlayer;
+    Vector3 previousPosition;
+
     float remainingDistance;
+    float curSpeed;
     bool getPoint;
     bool canPatrol;
-    Coroutine waitRotine, viewRotine;
+
+    Coroutine waitRotine, viewRotine, castSkill;
     Transform point;
 
     private void Awake()
@@ -36,43 +44,84 @@ public class EnemyPatrol : MonoBehaviour
         playerRef = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    private void Start() 
+    private void Start()
     {
         viewRotine = StartCoroutine(FOVRoutine());
         canPatrol = true;
-        GetPoint(); 
+        GetPoint();
     }
 
     void Update()
     {
-        if (!enemyScript.die)
+        if (!scriptHealth.die)
         {
+            LookTarget();
+            CurrentSpeed();
             Behaviour();
         }
-        else if(navMesh.enabled)
+        else if (navMesh.enabled)
         {
             StopCoroutine(waitRotine);
             StopCoroutine(viewRotine);
+            StopCoroutine(castSkill);
             navMesh.enabled = false;
         }
     }
 
+    #region animator
+    void CurrentSpeed()
+    {
+        Vector3 curMove = transform.position - previousPosition;
+        curSpeed = curMove.magnitude / Time.deltaTime;
+        animEnemy.SetFloat("speed", curSpeed);
+        previousPosition = transform.position;
+    }
+
+    #endregion
+
     #region behaviour
     void Behaviour()
     {
+        if (navMesh.isStopped) return;
         remainingDistance = navMesh.remainingDistance;
+        Attack();
         if (!canSeePlayer && canPatrol) Patrol();
         else ChasePlayer();
     }
+
+    void LookTarget()
+    {
+        if (!canSeePlayer) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateChaseSpeed * Time.deltaTime);
+    }
+
+    void ChasePlayer()
+    {
+        if (canSeePlayer)
+        {
+            canPatrol = false;
+            navMesh.speed = 6;
+            navMesh.stoppingDistance = weaponRange;
+            navMesh.SetDestination(lastPointPlayer);
+        }
+        else if (!canSeePlayer && remainingDistance > 0)
+        {
+            navMesh.stoppingDistance = 0;
+        }
+        else
+        {
+            navMesh.speed = 4;
+            canPatrol = true;
+        }
+
+    }
+
     #endregion
 
     #region patrol
     void Patrol()
-    {
-        PathComplete();
-    }
-
-    void PathComplete()
     {
         if (remainingDistance != Mathf.Infinity && navMesh.pathStatus == NavMeshPathStatus.PathComplete && remainingDistance == 0 && !getPoint)
         {
@@ -95,13 +144,13 @@ public class EnemyPatrol : MonoBehaviour
         navMesh.SetDestination(point.position);
     }
     #endregion
-    
+
     #region fieldOfView
     IEnumerator FOVRoutine()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
-        
-        while(true)
+
+        while (true)
         {
             if (canSeePlayer)
                 lastPointPlayer = playerRef.transform.position;
@@ -133,29 +182,23 @@ public class EnemyPatrol : MonoBehaviour
         else if (canSeePlayer)
             canSeePlayer = false;
     }
-
-    void ChasePlayer()
-    {
-        if (canSeePlayer)
-        {
-            canPatrol = false;
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateChaseSpeed * Time.deltaTime);
-            navMesh.stoppingDistance = 15;
-            navMesh.SetDestination(lastPointPlayer);
-        }
-        else if (!canSeePlayer && remainingDistance > 0)
-        {
-            navMesh.stoppingDistance = 0;
-            navMesh.SetDestination(lastPointPlayer);
-        }
-        else
-        {
-            canPatrol = true;
-        }
-    }
-
-
     #endregion
 
+    #region combat
+
+    void Attack()
+    {
+        if (canSeePlayer && curSpeed < 0.15f)
+            castSkill = StartCoroutine(CastSkill());
+    }
+
+    IEnumerator CastSkill()
+    {
+        navMesh.isStopped = true;
+        yield return new WaitForSeconds(timeToCast);
+        animEnemy.Play("attack01");
+        yield return new WaitForSeconds(1f);
+        navMesh.isStopped = false;
+    }
+    #endregion
 }

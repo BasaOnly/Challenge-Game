@@ -1,12 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(EnemyPatrol))]
+[CustomEditor(typeof(EnemyBehaviour))]
 public class FieldOfViewEditor : Editor
 {
     private void OnSceneGUI()
     {
-        EnemyPatrol patrol = (EnemyPatrol) target;
+        EnemyBehaviour patrol = (EnemyBehaviour) target;
         Handles.color = Color.white;
         Handles.DrawWireArc(patrol.transform.position, Vector3.up, Vector3.forward, 360, patrol.radius);
         //left side

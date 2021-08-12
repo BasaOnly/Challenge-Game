@@ -7,6 +7,7 @@ public class ProjectileMagic : MonoBehaviour
     [SerializeField] float forceVelocity;
     [SerializeField] ParticleSystem explosionEffect;
     [SerializeField] Rigidbody rig;
+
     private void Start()
     {
         StartCoroutine(ExplodeAfterTime());
@@ -16,7 +17,7 @@ public class ProjectileMagic : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.transform.CompareTag("Enemy"))
-            collision.transform.GetComponent<Enemy>().TakeDamage(damage);
+            collision.transform.GetComponent<Health>().TakeDamage(damage);
       
         Explode();
     }

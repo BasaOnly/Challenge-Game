@@ -4,8 +4,6 @@ using UnityEngine;
 public class PatrolControl : MonoBehaviour
 {
     public Paths[] paths;
-    
-
     public Transform GetPoint(int indexEnemy)
     {
         Paths path = paths[indexEnemy];
