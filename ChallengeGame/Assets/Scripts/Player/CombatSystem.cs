@@ -16,14 +16,17 @@ public class CombatSystem : MonoBehaviour
     [SerializeField] GameObject[] attackPrefabs;
     [SerializeField] GameObject[] spearFX;
     [SerializeField] GameObject defenseMagic;
-    [SerializeField] LayerMask ignoreLayer;
 
-    [Header("RotationAttack")]
-    [SerializeField] float rotationSpeed;
+    [Header("AutoTarget")]
+    [SerializeField] LayerMask targetMask;
+    [SerializeField] LayerMask obstructionMask;
+    [SerializeField] float radius;
+    [Range(0, 360)] [SerializeField] float angle;
 
     Vector3 direction;
     Vector3 foward;
-    Transform enemy;
+    [SerializeField] Transform enemy;
+    Vector3 camPosFoward;
     Vector3 camPos;
 
     private void Awake()
@@ -85,24 +88,49 @@ public class CombatSystem : MonoBehaviour
     #region rotate
     void TargetFind()
     {
-        camPos = cam.transform.forward;
+        camPos = cam.transform.position;
         camPos.y = 0;
-        foward = camPos;
-
-        if (Physics.SphereCast(posSpawnMagic[indexMagic].position, 3f, camPos, out RaycastHit hit))
+        camPosFoward = cam.transform.forward;
+        camPosFoward.y = 0;
+        foward = camPosFoward;
+        FieldOfView();
+        if (enemy)
         {
-            if (hit.transform.CompareTag("Enemy"))
-            {
-                enemy = hit.transform;
-                direction = (enemy.position - this.transform.position).normalized;
-                foward = direction;
-            }
-            else
-            {
-                enemy = null;
-            }
+            direction = (enemy.position - this.transform.position).normalized;
+            direction.y = 0;
+            foward = direction;
         }
-        else { enemy = null; }
+    }
+
+    void FieldOfView()
+    {
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
+
+        if (rangeChecks.Length != 0)
+        {
+            for (int i = 0; i < rangeChecks.Length; i++)
+            {
+                Transform target = rangeChecks[i].transform;
+                Vector3 directionToTarget = (target.position - camPos).normalized;
+
+                if (Vector3.Angle(camPosFoward, directionToTarget) < angle / 2)
+                {
+                    float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                    if (!Physics.Raycast(camPos, directionToTarget, distanceToTarget, obstructionMask))
+                    {
+                        enemy = target;
+                        break;
+                    }
+                }
+                else
+                {
+                    enemy = null;
+                }
+            } 
+        }
+        else if (enemy)
+            enemy = null;
     }
     #endregion
 
