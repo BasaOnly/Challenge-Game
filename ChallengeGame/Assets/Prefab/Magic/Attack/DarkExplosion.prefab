@@ -37648,7 +37648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 270fef679f68904419b69b7b7bd5b04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 5
   particleFX: {fileID: 5983934328444925484}
 --- !u!1 &4238365720267897262
 GameObject:

@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] Animator animEnemy;
-    [SerializeField] Transform target;
-    [SerializeField] Collider colEnemy;
+    [SerializeField] Animator animator;
+    [SerializeField] Collider collider;
     [SerializeField] Transform instantaneousPosMagic;
 
     [Header("Status")]
@@ -25,8 +22,8 @@ public class Health : MonoBehaviour
         if (life <= 0)
         {
             die = true;
-            colEnemy.enabled = false;
-            animEnemy.Play("die");
+            collider.enabled = false;
+            animator.Play("Death");
         }
 
     }

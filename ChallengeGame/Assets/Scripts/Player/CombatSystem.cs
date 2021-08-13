@@ -69,7 +69,7 @@ public class CombatSystem : MonoBehaviour
         if (enemy == null) return;
 
         GameObject magic = Instantiate(attackPrefabs[indexMagic], posSpawnMagic[indexMagic].position, Quaternion.identity);
-        magic.GetComponent<InstantaneousMagic>().SetData(enemy);
+        magic.GetComponent<InstantaneousMagic>().SetData(enemy.GetComponent<Health>());
     }
 
     void SpawnProjectileMagic()

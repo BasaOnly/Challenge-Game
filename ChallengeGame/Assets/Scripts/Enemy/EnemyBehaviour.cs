@@ -8,8 +8,8 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Components")]
     [SerializeField] NavMeshAgent navMesh;
     [SerializeField] Animator animEnemy;
-    [HideInInspector] public Transform playerRef;
-    [SerializeField] Health scriptHealth;
+    [HideInInspector] public Health playerScriptHealth;
+    [SerializeField] Health enemyScriptHealth;
 
     [Header("FieldOfView")]
     public float radius;
@@ -26,6 +26,9 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Fight")]
     [SerializeField] float timeToCast;
     [SerializeField] float weaponRange;
+    [SerializeField] GameObject[] attackPrefabs;
+    [SerializeField] Transform[] posSpawnMagic;
+    [SerializeField] string[] animName;
 
     Vector3 directionToTarget;
     Vector3 lastPointPlayer;
@@ -35,13 +38,14 @@ public class EnemyBehaviour : MonoBehaviour
     float curSpeed;
     bool getPoint;
     bool canPatrol;
+    bool win;
 
     Coroutine waitRotine, viewRotine, castSkill;
     Transform point;
 
     private void Awake()
     {
-        playerRef = GameObject.FindGameObjectWithTag("Player").transform;
+        playerScriptHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
     }
 
     private void Start()
@@ -53,7 +57,10 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (!scriptHealth.die)
+        if (!win) CheckPlayerAlive();
+        else return;
+
+        if (!enemyScriptHealth.die)
         {
             LookTarget();
             CurrentSpeed();
@@ -63,8 +70,9 @@ public class EnemyBehaviour : MonoBehaviour
         {
             StopCoroutine(waitRotine);
             StopCoroutine(viewRotine);
-            StopCoroutine(castSkill);
+            if(castSkill != null) StopCoroutine(castSkill);
             navMesh.enabled = false;
+            Destroy(this.gameObject, 5);
         }
     }
 
@@ -83,6 +91,7 @@ public class EnemyBehaviour : MonoBehaviour
     void Behaviour()
     {
         if (navMesh.isStopped) return;
+
         remainingDistance = navMesh.remainingDistance;
         Attack();
         if (!canSeePlayer && canPatrol) Patrol();
@@ -108,6 +117,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else if (!canSeePlayer && remainingDistance > 0)
         {
+            navMesh.SetDestination(lastPointPlayer);
             navMesh.stoppingDistance = 0;
         }
         else
@@ -116,6 +126,19 @@ public class EnemyBehaviour : MonoBehaviour
             canPatrol = true;
         }
 
+    }
+
+    void CheckPlayerAlive()
+    {
+        if (playerScriptHealth.die)
+        {
+            StopCoroutine(waitRotine);
+            StopCoroutine(viewRotine);
+            StopCoroutine(castSkill);
+            navMesh.isStopped = true;
+            animEnemy.SetTrigger("win");
+            win = true;
+        }
     }
 
     #endregion
@@ -153,7 +176,7 @@ public class EnemyBehaviour : MonoBehaviour
         while (true)
         {
             if (canSeePlayer)
-                lastPointPlayer = playerRef.transform.position;
+                lastPointPlayer = playerScriptHealth.transform.position;
 
             yield return wait;
             FieldOfViewCheck();
@@ -196,9 +219,22 @@ public class EnemyBehaviour : MonoBehaviour
     {
         navMesh.isStopped = true;
         yield return new WaitForSeconds(timeToCast);
-        animEnemy.Play("attack01");
+        int index = Random.Range(0, animName.Length);
+        animEnemy.Play(animName[index]);
         yield return new WaitForSeconds(1f);
         navMesh.isStopped = false;
+    }
+
+    void Magic01()
+    {
+        GameObject magic = Instantiate(attackPrefabs[0], posSpawnMagic[0].position, Quaternion.identity);
+        magic.transform.forward = transform.forward;
+    }
+
+    void Magic02()
+    {
+        GameObject magic = Instantiate(attackPrefabs[1], posSpawnMagic[0].position, Quaternion.identity);
+        magic.GetComponent<InstantaneousMagic>().SetData(playerScriptHealth);
     }
     #endregion
 }

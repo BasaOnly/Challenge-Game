@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
+    [SerializeField] Health playerHealth;
     public VectorEvent[] vectorEvent;
     public OnTriggerEvent[] triggerEvents;
     public OnTriggerBoolEvent[] triggerBoolEvents;
@@ -38,6 +39,7 @@ public class InputManager : MonoBehaviour
     //Axis
     public void OnMovement(InputAction.CallbackContext value)
     {
+        if (playerHealth.die) return;
         Vector2 inputMovement = value.ReadValue<Vector2>();
         vectorEvent[0].Invoke(inputMovement.x, inputMovement.y);
     }
@@ -50,22 +52,26 @@ public class InputManager : MonoBehaviour
     //Trigger
     public void OnAttack(InputAction.CallbackContext value)
     {
+        if (playerHealth.die) return;
         triggerEvents[0].Invoke();
     }
 
     public void OnSkillChange(InputAction.CallbackContext value)
     {
+        if (playerHealth.die) return;
         triggerEvents[1].Invoke();
     }
 
     //Bool
     public void OnRun(InputAction.CallbackContext value)
     {
+        if (playerHealth.die) return;
         triggerBoolEvents[0].Invoke(value.performed);
     }
 
     public void OnDefend(InputAction.CallbackContext value)
     {
+        if (playerHealth.die) return;
         triggerBoolEvents[1].Invoke(value.performed);
     }
 

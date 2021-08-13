@@ -16,7 +16,7 @@ public class ProjectileMagic : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.CompareTag("Enemy"))
+        if(collision.transform.CompareTag("Enemy") || collision.transform.CompareTag("Player"))
             collision.transform.GetComponent<Health>().TakeDamage(damage);
       
         Explode();

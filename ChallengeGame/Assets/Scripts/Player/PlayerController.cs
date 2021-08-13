@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] CharacterController controler;
+    [SerializeField] Health healthScript;
    
     [Header("Animation")]
     public Animator animPlayer;
@@ -42,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (healthScript.die) return;
+
         GetAnimVariables();
         CheckGround();
         if (canMove) SimpleMovement();

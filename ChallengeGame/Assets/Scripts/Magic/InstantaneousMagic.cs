@@ -7,11 +7,11 @@ public class InstantaneousMagic : MonoBehaviour
     [SerializeField] float damage;
     [SerializeField] GameObject particleFX;
 
-    public void SetData(Transform target)
+    public void SetData(Health target)
     {
         if (target)
         {
-            target.transform.GetComponent<Health>().TakeDamage(damage, this.gameObject);
+            target.TakeDamage(damage, this.gameObject);
             particleFX.SetActive(true);
         }
 
