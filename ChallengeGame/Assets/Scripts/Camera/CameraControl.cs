@@ -69,7 +69,7 @@ public class CameraControl : MonoBehaviour
         t = target.position + rotation * offSet;
         f = rotation * -Vector3.forward;
         position = t + f * playerDistance;
-        Vector3 suavizaPos = Vector3.SmoothDamp(transform.position, position, ref refVelocity, positionSensitivity);
+        Vector3 suavizaPos = Vector3.SmoothDamp(transform.position, position, ref refVelocity, positionSensitivity * Time.deltaTime);
         transform.position = suavizaPos;
         transform.LookAt(t);
     }

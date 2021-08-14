@@ -16,7 +16,7 @@ public class EnemyBehaviour : MonoBehaviour
     [Range(0, 360)] public float angle;
     [SerializeField] LayerMask targetMask;
     [SerializeField] LayerMask obstructionMask;
-    [HideInInspector] public bool canSeePlayer;
+    public bool canSeePlayer;
 
     [Header("Patrol")]
     [SerializeField] PatrolControl scriptPatrol;
@@ -194,7 +194,6 @@ public class EnemyBehaviour : MonoBehaviour
         {
             Transform target = rangeChecks[0].transform;
             directionToTarget = (target.position - transform.position).normalized;
-
             if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
@@ -222,7 +221,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         navMesh.isStopped = true;
         yield return new WaitForSeconds(timeToCast);
-        int index = Random.Range(0, animName.Length);
+        int index = Random.Range(0, attackPrefabs.Length);
         animEnemy.Play(animName[index]);
         yield return new WaitForSeconds(1f);
         navMesh.isStopped = false;

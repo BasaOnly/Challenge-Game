@@ -32,7 +32,8 @@ public class InputManager : MonoBehaviour
         playerActions.PlayerControls.Camera.canceled += OnCameraRotation;
 
     }
-    
+
+
     #region inputSystem
     //Axis
     public void OnMovement(InputAction.CallbackContext value)

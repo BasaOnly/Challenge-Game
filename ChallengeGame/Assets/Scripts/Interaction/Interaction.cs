@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Interaction : MonoBehaviour
 {
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

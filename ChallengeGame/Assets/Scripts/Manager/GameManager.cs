@@ -6,11 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     
-    [Header("QUests")]
+    [Header("Quests")]
     public int itensQuest;
+    public bool questCompleted;
+    [SerializeField] Animator[] animDoor;
 
     [Header("Player")]
     public bool stopActionsPlayer;
+    public bool unlockMagic;
 
     [Header("Interaction")]
     public Interaction interaction;
@@ -31,10 +34,32 @@ public class GameManager : MonoBehaviour
     public void AddQuestItem()
     {
         itensQuest++;
-       
-        if(itensQuest > 4)
+        UIManager.instance.itensQuest.text = string.Format("{0}/4", itensQuest);
+        UIManager.instance.keyText.enabled = false;
+
+        switch (itensQuest)
         {
-            //OpenDoor
+            case 1:
+                OpenDoor(0);
+                break;
+            case 3:
+                OpenDoor(1);
+                break;
+            case 4:
+                QuestCompleted();
+                OpenDoor(2);
+                break;
         }
+    }
+
+    void OpenDoor(int indexDoor)
+    {
+        animDoor[indexDoor].Play("OpenDoor");
+    }
+
+    void QuestCompleted()
+    {
+        UIManager.instance.itensQuest.color = Color.green;
+        questCompleted = true;
     }
 }

@@ -9,6 +9,7 @@ public class Health : MonoBehaviour
 
     [Header("Status")]
     public float life;
+    public float maxLife;
     public bool die;
 
     #region combat
@@ -17,7 +18,7 @@ public class Health : MonoBehaviour
         if (instantaneousMagic)
             instantaneousMagic.transform.position = instantaneousPosMagic.position;
 
-        if (life < 0)
+        if (life <= 0)
         {
             die = true;
             collider.enabled = false;

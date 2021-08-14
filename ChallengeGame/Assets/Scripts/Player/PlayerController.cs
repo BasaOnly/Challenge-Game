@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
     public void OnInteraction()
     {
         Interaction objInteraction = GameManager.instance.interaction;
-       if(objInteraction != null)
+        if (objInteraction != null)
         {
             objInteraction.CanInteraction();
         }

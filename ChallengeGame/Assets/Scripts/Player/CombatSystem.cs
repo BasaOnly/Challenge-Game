@@ -37,7 +37,7 @@ public class CombatSystem : MonoBehaviour
     #region input
     public void OnAttack()
     {
-        if (!scriptPlayer.canMove || scriptPlayer.defend) return;
+        if (!scriptPlayer.canMove || scriptPlayer.defend || !GameManager.instance.unlockMagic) return;
         animPlayer.Play(animAttackName[indexMagic]);
         TargetFind();
         StartCoroutine(RotateToTarget());

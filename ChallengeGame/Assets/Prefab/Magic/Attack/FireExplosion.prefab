@@ -37616,7 +37616,7 @@ GameObject:
   - component: {fileID: 8058923048825204520}
   m_Layer: 2
   m_Name: FireExplosion
-  m_TagString: Untagged
+  m_TagString: Magic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
