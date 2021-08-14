@@ -17,13 +17,15 @@ public class Health : MonoBehaviour
     {
         if (instantaneousMagic)
             instantaneousMagic.transform.position = instantaneousPosMagic.position;
-
+       
         if (life <= 0)
         {
             die = true;
             collider.enabled = false;
             animator.Play("Death");
         }
+
+    
     }
 
     public void GetHit()

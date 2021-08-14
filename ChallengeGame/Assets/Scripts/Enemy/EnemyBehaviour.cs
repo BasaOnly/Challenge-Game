@@ -135,7 +135,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     void CheckPlayerAlive()
     {
-        if (playerScriptHealth.die)
+        if (playerScriptHealth.die && navMesh.enabled)
         {
             StopAllCoroutines();
             navMesh.isStopped = true;

@@ -39,7 +39,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""6e60f598-2edd-499f-8d30-e496ba57a626"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""StickDeadzone,ScaleVector2(x=15,y=15)"",
+                    ""processors"": """",
                     ""interactions"": """"
                 },
                 {
@@ -177,7 +177,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""id"": ""9af0b9c3-8b1f-438a-9183-6a22840912c0"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=15,y=15)"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Camera"",
                     ""isComposite"": false,

@@ -14,7 +14,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField] [Range(40f, 75f)] float maxLimit;
 
     [Header("Position")]
-    [SerializeField] [Range(0.01f, 0.5f)] float positionSensitivity;
+    [SerializeField] [Range(0.01f, 10f)] float positionSensitivity;
     Vector3 refVelocity = Vector3.zero;
 
     [Header("Distance")]
@@ -53,7 +53,7 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (GameManager.instance.stopActionsPlayer) return;
+        if (GameManager.instance.stopActionsPlayer) { position = transform.position; return; }
         CameraMovement();
     }
 

@@ -7,7 +7,7 @@ public class HealthPlayer : Health
         if (!animator.GetBool("defend"))
         {
             life -= damage;
-            UIManager.instance.SetValueHP(life/maxLife);
+            UIManager.instance.SetValueHP(life / maxLife);
             GetHit();
         }
 

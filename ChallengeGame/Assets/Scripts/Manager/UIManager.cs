@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image imgSkill;
     [SerializeField] Sprite[] spritesSkill;
     [SerializeField] Image HPFill;
+
+    [Header("Canvas World")]
+    [SerializeField] Canvas canvasWorld;
+    [SerializeField] GameObject prefabHPEnemy;
+    [SerializeField] List<Image> listFillHPEnemy = new List<Image>();
 
     [Header("Components NPC")]
     [SerializeField] Text titleText;
@@ -27,11 +33,7 @@ public class UIManager : MonoBehaviour
         else
             Destroy(this.gameObject);
     }
-
-    public void ChangeSpriteSkill(int index)
-    {
-        imgSkill.sprite = spritesSkill[index];
-    }
+    #region input
 
     public void ChangeNameKey(string keyName)
     {
@@ -46,6 +48,14 @@ public class UIManager : MonoBehaviour
             switchMagic = string.Format("[Q]");
         }
     }
+    #endregion
+
+    #region magic
+    public void ChangeSpriteSkill(int index)
+    {
+        imgSkill.sprite = spritesSkill[index];
+    }
+
 
     public void UnlockMagics()
     {
@@ -56,7 +66,9 @@ public class UIManager : MonoBehaviour
         containerSkill.SetActive(true);
         GameManager.instance.unlockMagic = true;
     }
+    #endregion
 
+    #region playerHP
     public void SetValueHP(float life)
     {
         StartCoroutine(LerpValueHP(life));
@@ -84,4 +96,36 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region enemyHP
+    public int InstantiateLifeBar()
+    {
+        GameObject bar = Instantiate(prefabHPEnemy, canvasWorld.transform);
+        listFillHPEnemy.Add(bar.transform.GetChild(0).GetComponent<Image>());
+        int indexBar = listFillHPEnemy.Count - 1;
+        return indexBar;
+    }
+
+    public GameObject GetBar(int indexBar)
+    {
+        return listFillHPEnemy[indexBar].transform.gameObject;
+    }
+
+    public void SetHPEnemy(float life, int indexLerp)
+    {
+        StartCoroutine(LerpHPEnemy(life, indexLerp));
+    }
+
+    IEnumerator LerpHPEnemy(float life, int indexLerp)
+    {
+        float currentHP = listFillHPEnemy[indexLerp].fillAmount;
+        while (currentHP > life)
+        {
+            currentHP -= Time.deltaTime;
+            listFillHPEnemy[indexLerp].fillAmount = currentHP;
+            yield return null;
+        }
+    }
+    #endregion
 }
