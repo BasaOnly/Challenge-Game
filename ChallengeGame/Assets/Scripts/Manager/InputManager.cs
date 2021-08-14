@@ -22,6 +22,7 @@ public class InputManager : MonoBehaviour
         playerActions.PlayerControls.Attack.performed += OnAttack;
         playerActions.PlayerControls.SkillChange.performed += OnSkillChange;
         playerActions.PlayerControls.Interaction.performed += OnInteraction;
+        playerActions.PlayerControls.Menu.performed += OnMenu;
         playerActions.PlayerControls.Run.performed += OnRun;
         playerActions.PlayerControls.Run.canceled += OnRun;
         playerActions.PlayerControls.Defend.performed += OnDefend;
@@ -63,9 +64,12 @@ public class InputManager : MonoBehaviour
 
     public void OnInteraction(InputAction.CallbackContext value)
     {
- 
-    
         triggerEvents[2].Invoke();
+    }
+    public void OnMenu(InputAction.CallbackContext value)
+    {
+        if (GameManager.instance.stopActionsPlayer) return;
+        triggerEvents[3].Invoke();
     }
 
     //Bool

@@ -14,6 +14,8 @@ public class HealthPlayer : Health
         if(life <= 0)
         {
             GameManager.instance.stopActionsPlayer = true;
+            UIManager.instance.AjustMenuDeath();
+            UIManager.instance.OpenCloseMenu();
         }
 
         base.TakeDamage(damage, instantaneousMagic);

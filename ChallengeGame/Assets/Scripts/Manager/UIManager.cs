@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,10 +14,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] Sprite[] spritesSkill;
     [SerializeField] Image HPFill;
 
+    [Header("Menu")]
+    [SerializeField] GameObject menu;
+    [SerializeField] Button btnResume;
+    [SerializeField] Button btnRestart;
+
     [Header("Canvas World")]
     [SerializeField] Canvas canvasWorld;
     [SerializeField] GameObject prefabHPEnemy;
     [SerializeField] List<Image> listFillHPEnemy = new List<Image>();
+
+    [Header("Quest Final")]
+    [SerializeField] GameObject panelQuestFinal;
+    public Text textFinalQuest;
 
     [Header("Components NPC")]
     [SerializeField] Text titleText;
@@ -48,6 +58,20 @@ public class UIManager : MonoBehaviour
             switchMagic = string.Format("[Q]");
         }
     }
+
+    public void OpenCloseMenu()
+    {
+        menu.SetActive(!menu.activeInHierarchy);
+        GameManager.instance.stopActionsPlayer = menu.activeInHierarchy;
+    }
+
+    public void AjustMenuDeath()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(btnRestart.gameObject);
+        btnResume.gameObject.SetActive(false);
+        btnRestart.gameObject.SetActive(true);
+    }
     #endregion
 
     #region magic
@@ -64,6 +88,7 @@ public class UIManager : MonoBehaviour
         imgItemQuest.enabled = false;
         panelImgSkills.SetActive(true);
         containerSkill.SetActive(true);
+        panelQuestFinal.SetActive(true);
         GameManager.instance.unlockMagic = true;
     }
     #endregion

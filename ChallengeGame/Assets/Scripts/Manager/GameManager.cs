@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +11,11 @@ public class GameManager : MonoBehaviour
     public int itensQuest;
     public bool questCompleted;
     [SerializeField] Animator[] animDoor;
+    [SerializeField] int numberOfEnemys;
+    public int enemyDefeat;
 
     [Header("Player")]
+    [SerializeField] Animator animPlayer;
     public bool stopActionsPlayer;
     public bool unlockMagic;
 
@@ -62,4 +66,35 @@ public class GameManager : MonoBehaviour
         UIManager.instance.itensQuest.color = Color.green;
         questCompleted = true;
     }
+
+    public void EnemyDefeat()
+    {
+        enemyDefeat++;
+
+        if(enemyDefeat == numberOfEnemys)
+        {
+            stopActionsPlayer = true;
+            animPlayer.Play("Victory");
+            UIManager.instance.textFinalQuest.color = Color.green;
+            StartCoroutine(WaitToOpenMenu());
+        }
+    }
+
+    IEnumerator WaitToOpenMenu()
+    {
+        yield return new WaitForSeconds(4);
+        UIManager.instance.OpenCloseMenu();
+    }
+
+    #region button
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
+    }
+    #endregion
 }

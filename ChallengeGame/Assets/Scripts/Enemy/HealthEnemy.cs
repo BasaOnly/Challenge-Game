@@ -26,6 +26,12 @@ public class HealthEnemy : Health
         wasAttacked = true;
         life -= damage;
         UIManager.instance.SetHPEnemy(life / maxLife, barIndex);
+
+        if(life <= 0)
+        {
+            GameManager.instance.EnemyDefeat();
+        }
+
         GetHit();
         base.TakeDamage(damage, instantaneousMagic);
     }

@@ -24,15 +24,13 @@ public class Health : MonoBehaviour
             collider.enabled = false;
             animator.Play("Death");
         }
-
-    
     }
-
     public void GetHit()
     {
         animator.ResetTrigger("getHit");
         animator.SetTrigger("getHit");
     }
+
     
     #endregion
 }
