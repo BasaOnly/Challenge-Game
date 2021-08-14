@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject menu;
     [SerializeField] Button btnResume;
     [SerializeField] Button btnRestart;
+    [SerializeField] bool teste;
 
     [Header("Canvas World")]
     [SerializeField] Canvas canvasWorld;
@@ -43,6 +44,7 @@ public class UIManager : MonoBehaviour
         else
             Destroy(this.gameObject);
     }
+
     #region input
 
     public void ChangeNameKey(string keyName)
@@ -67,10 +69,10 @@ public class UIManager : MonoBehaviour
 
     public void AjustMenuDeath()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(btnRestart.gameObject);
         btnResume.gameObject.SetActive(false);
         btnRestart.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(btnRestart.gameObject);
     }
     #endregion
 

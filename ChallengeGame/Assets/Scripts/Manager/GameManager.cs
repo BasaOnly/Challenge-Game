@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour
     IEnumerator WaitToOpenMenu()
     {
         yield return new WaitForSeconds(4);
+        UIManager.instance.AjustMenuDeath();
         UIManager.instance.OpenCloseMenu();
     }
 
