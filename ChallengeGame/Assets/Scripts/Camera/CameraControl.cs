@@ -53,6 +53,7 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameManager.instance.stopActionsPlayer) return;
         CameraMovement();
     }
 
@@ -105,6 +106,8 @@ public class CameraControl : MonoBehaviour
     #region systemInput
     public void OnMouseValues(float mouseX, float mouseY)
     {
+        if (GameManager.instance.stopActionsPlayer) return;
+       
         this.mouseX = mouseX;
         this.mouseY = mouseY;
     }

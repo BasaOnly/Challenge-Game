@@ -8,8 +8,8 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Components")]
     [SerializeField] NavMeshAgent navMesh;
     [SerializeField] Animator animEnemy;
-    [HideInInspector] public Health playerScriptHealth;
-    [SerializeField] Health enemyScriptHealth;
+    [HideInInspector] public HealthPlayer playerScriptHealth;
+    [SerializeField] HealthEnemy enemyScriptHealth;
 
     [Header("FieldOfView")]
     public float radius;
@@ -40,17 +40,16 @@ public class EnemyBehaviour : MonoBehaviour
     bool canPatrol;
     bool win;
 
-    Coroutine waitRotine, viewRotine, castSkill;
     Transform point;
 
     private void Awake()
     {
-        playerScriptHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+        playerScriptHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<HealthPlayer>();
     }
 
     private void Start()
     {
-        viewRotine = StartCoroutine(FOVRoutine());
+        StartCoroutine(FOVRoutine());
         canPatrol = true;
         GetPoint();
     }
@@ -68,11 +67,9 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else if (navMesh.enabled)
         {
-            StopCoroutine(waitRotine);
-            StopCoroutine(viewRotine);
-            if(castSkill != null) StopCoroutine(castSkill);
+            StopAllCoroutines();
             navMesh.enabled = false;
-            Destroy(this.gameObject, 5);
+            StartCoroutine(Disappear());
         }
     }
 
@@ -94,13 +91,14 @@ public class EnemyBehaviour : MonoBehaviour
 
         remainingDistance = navMesh.remainingDistance;
         Attack();
-        if (!canSeePlayer && canPatrol) Patrol();
+        if (enemyScriptHealth.wasAttacked) FindAndChase();
+        else if (!canSeePlayer && canPatrol) Patrol();
         else ChasePlayer();
     }
 
     void LookTarget()
     {
-        if (!canSeePlayer) return;
+        if (!canSeePlayer && !enemyScriptHealth.wasAttacked) return;
 
         Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateChaseSpeed * Time.deltaTime);
@@ -124,17 +122,22 @@ public class EnemyBehaviour : MonoBehaviour
         {
             navMesh.speed = 4;
             canPatrol = true;
+            enemyScriptHealth.wasAttacked = false;
         }
-
+    }
+    
+    void FindAndChase()
+    {
+        navMesh.speed = 6;
+        navMesh.stoppingDistance = weaponRange;
+        navMesh.SetDestination(playerScriptHealth.transform.position);
     }
 
     void CheckPlayerAlive()
     {
         if (playerScriptHealth.die)
         {
-            StopCoroutine(waitRotine);
-            StopCoroutine(viewRotine);
-            StopCoroutine(castSkill);
+            StopAllCoroutines();
             navMesh.isStopped = true;
             animEnemy.SetTrigger("win");
             win = true;
@@ -149,7 +152,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (remainingDistance != Mathf.Infinity && navMesh.pathStatus == NavMeshPathStatus.PathComplete && remainingDistance == 0 && !getPoint)
         {
             getPoint = true;
-            waitRotine = StartCoroutine(WaitToMove());
+            StartCoroutine(WaitToMove());
         }
     }
 
@@ -212,7 +215,7 @@ public class EnemyBehaviour : MonoBehaviour
     void Attack()
     {
         if (canSeePlayer && curSpeed < 0.15f)
-            castSkill = StartCoroutine(CastSkill());
+            StartCoroutine(CastSkill());
     }
 
     IEnumerator CastSkill()
@@ -235,6 +238,25 @@ public class EnemyBehaviour : MonoBehaviour
     {
         GameObject magic = Instantiate(attackPrefabs[1], posSpawnMagic[0].position, Quaternion.identity);
         magic.GetComponent<InstantaneousMagic>().SetData(playerScriptHealth);
+    }
+    #endregion
+
+    #region visual
+    IEnumerator Disappear()
+    {
+        yield return new WaitForSeconds(3);
+        float timeToDisappear = 0f;
+        while (timeToDisappear < 4)
+        {
+            timeToDisappear += Time.deltaTime/2;
+            float lerpValue = timeToDisappear;
+            Vector3 pos = transform.position;
+            pos.y -= lerpValue;
+            transform.position = pos;
+            yield return null;
+        }
+
+        Destroy(this.gameObject);
     }
     #endregion
 }

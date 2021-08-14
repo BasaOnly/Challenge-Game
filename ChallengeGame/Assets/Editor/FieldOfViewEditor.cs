@@ -21,7 +21,7 @@ public class FieldOfViewEditor : Editor
         if (patrol.canSeePlayer)
         {
             Handles.color = Color.green;
-            Handles.DrawLine(patrol.transform.position, patrol.playerRef.transform.position);
+            Handles.DrawLine(patrol.transform.position, patrol.playerScriptHealth.transform.position);
         }
     }
 

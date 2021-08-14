@@ -1,5 +1,65 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1296834138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1296834139}
+  m_Layer: 3
+  m_Name: posMagic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1296834139
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296834138}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.70000005, z: 1.88}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3221322114015841901}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2119461246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119461247}
+  m_Layer: 3
+  m_Name: posMagic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2119461247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119461246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.70000005, z: 1.88}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3221322114015841901}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3215593515863674831
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,7 +472,7 @@ GameObject:
   - component: {fileID: 3221322114015841901}
   - component: {fileID: 3312045762287577755}
   - component: {fileID: 3216974771020247834}
-  - component: {fileID: 3216974771020247837}
+  - component: {fileID: 5426241363402558041}
   - component: {fileID: 3343306512988002040}
   - component: {fileID: 5852093121396495968}
   m_Layer: 6
@@ -436,6 +496,8 @@ Transform:
   - {fileID: 3221459536629558389}
   - {fileID: 3218915433066565793}
   - {fileID: 3216974772706349289}
+  - {fileID: 1296834139}
+  - {fileID: 2119461247}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -472,7 +534,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &3216974771020247837
+--- !u!114 &5426241363402558041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -481,16 +543,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3216036989654441365}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50b6ea334521436468d7a9f2d9bad432, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cfee4cfc7969974893e49cb18e10cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animEnemy: {fileID: 3312045762287577755}
-  target: {fileID: 0}
-  colEnemy: {fileID: 3216974771020247834}
+  animator: {fileID: 3312045762287577755}
+  collider: {fileID: 3216974771020247834}
   instantaneousPosMagic: {fileID: 3216974772706349289}
-  scriptPatrol: {fileID: 0}
   life: 100
   die: 0
+  wasAttacked: 0
 --- !u!114 &3343306512988002040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,10 +565,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navMesh: {fileID: 5852093121396495968}
-  animEnemy: {fileID: 0}
-  playerRef: {fileID: 0}
+  animEnemy: {fileID: 3312045762287577755}
+  playerScriptHealth: {fileID: 0}
+  enemyScriptHealth: {fileID: 5426241363402558041}
   radius: 25
-  angle: 100
+  angle: 140
   targetMask:
     serializedVersion: 2
     m_Bits: 8
@@ -516,9 +578,18 @@ MonoBehaviour:
     m_Bits: 1
   canSeePlayer: 0
   scriptPatrol: {fileID: 0}
-  rotateChaseSpeed: 10
-  indexEnemy: 0
-  die: 0
+  rotateChaseSpeed: 5
+  indexEnemy: 1
+  timeToCast: 1
+  weaponRange: 15
+  attackPrefabs:
+  - {fileID: 7208542149646294319, guid: 217c7f3884da20741900f6083de72533, type: 3}
+  - {fileID: 3607847296516327597, guid: 7bfbbffd3460ff34e9933beb76e6e197, type: 3}
+  posSpawnMagic:
+  - {fileID: 1296834139}
+  animName:
+  - Attack01
+  - Attack02
 --- !u!195 &5852093121396495968
 NavMeshAgent:
   m_ObjectHideFlags: 0

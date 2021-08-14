@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
         if (healthScript.die) return;
 
         GetAnimVariables();
@@ -82,16 +83,21 @@ public class PlayerController : MonoBehaviour
 
     void LocomotionRotation()
     {
-        if (GetInputVector() == Vector3.zero) return; 
-
-        direction = cam.transform.TransformDirection(GetInputVector());
-        direction.y = 0;
+        Vector3 forward = cam.transform.forward;
+        Vector3 right = cam.transform.right;
+        forward.y = 0f;
+        right.y = 0f; 
+        direction = forward.normalized * GetInputVector().z + right.normalized * GetInputVector().x;
+        direction.Normalize();
         transform.forward = Vector3.Slerp(transform.forward, direction, Time.deltaTime * rotationSpeed);
     }
   
     Vector3 GetInputVector()
     {
-       return new Vector3(vertical, 0, horizontal).normalized;
+        if (GameManager.instance.stopActionsPlayer) return Vector3.zero;
+
+        Vector3 input = new Vector3(horizontal, 0, vertical).normalized;
+        return input;
     }
 
     #endregion
@@ -121,6 +127,16 @@ public class PlayerController : MonoBehaviour
     {
         run = value;
     }
+
+    public void OnInteraction()
+    {
+        Interaction objInteraction = GameManager.instance.interaction;
+       if(objInteraction != null)
+        {
+            objInteraction.CanInteraction();
+        }
+    }
+
     #endregion
 
     #region gizmos

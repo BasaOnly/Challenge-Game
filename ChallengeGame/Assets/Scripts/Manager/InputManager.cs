@@ -1,17 +1,14 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Events;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
-    [SerializeField] Health playerHealth;
     public VectorEvent[] vectorEvent;
     public OnTriggerEvent[] triggerEvents;
     public OnTriggerBoolEvent[] triggerBoolEvents;
     PlayerActions playerActions;
- 
+
 
     private void Awake()
     {
@@ -24,6 +21,7 @@ public class InputManager : MonoBehaviour
         playerActions.Enable();
         playerActions.PlayerControls.Attack.performed += OnAttack;
         playerActions.PlayerControls.SkillChange.performed += OnSkillChange;
+        playerActions.PlayerControls.Interaction.performed += OnInteraction;
         playerActions.PlayerControls.Run.performed += OnRun;
         playerActions.PlayerControls.Run.canceled += OnRun;
         playerActions.PlayerControls.Defend.performed += OnDefend;
@@ -34,14 +32,14 @@ public class InputManager : MonoBehaviour
         playerActions.PlayerControls.Camera.canceled += OnCameraRotation;
 
     }
-
+    
     #region inputSystem
     //Axis
     public void OnMovement(InputAction.CallbackContext value)
     {
-        if (playerHealth.die) return;
+        UIManager.instance.ChangeNameKey(value.action.activeControl.shortDisplayName);
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        vectorEvent[0].Invoke(inputMovement.x, inputMovement.y);
+        vectorEvent[0].Invoke(inputMovement.y, inputMovement.x);
     }
     public void OnCameraRotation(InputAction.CallbackContext value)
     {
@@ -52,29 +50,35 @@ public class InputManager : MonoBehaviour
     //Trigger
     public void OnAttack(InputAction.CallbackContext value)
     {
-        if (playerHealth.die) return;
+        if (GameManager.instance.stopActionsPlayer) return;
         triggerEvents[0].Invoke();
     }
 
     public void OnSkillChange(InputAction.CallbackContext value)
     {
-        if (playerHealth.die) return;
+        if (GameManager.instance.stopActionsPlayer) return;
         triggerEvents[1].Invoke();
+    }
+
+    public void OnInteraction(InputAction.CallbackContext value)
+    {
+ 
+    
+        triggerEvents[2].Invoke();
     }
 
     //Bool
     public void OnRun(InputAction.CallbackContext value)
     {
-        if (playerHealth.die) return;
+        if (GameManager.instance.stopActionsPlayer) return;
         triggerBoolEvents[0].Invoke(value.performed);
     }
 
     public void OnDefend(InputAction.CallbackContext value)
     {
-        if (playerHealth.die) return;
+        if (GameManager.instance.stopActionsPlayer) return;
         triggerBoolEvents[1].Invoke(value.performed);
     }
-
 
     #endregion
 }

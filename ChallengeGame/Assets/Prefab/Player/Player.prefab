@@ -686,9 +686,9 @@ GameObject:
   - component: {fileID: 5292269210849168241}
   - component: {fileID: 5202468900761520987}
   - component: {fileID: 5287553277712937254}
+  - component: {fileID: 4374526566825637227}
   - component: {fileID: 5287553277712937255}
   - component: {fileID: 1812659474818730}
-  - component: {fileID: 860350332610512446}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -754,6 +754,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &4374526566825637227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5289294330825902735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b0387a10075b3949ad35d230b6364f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 5202468900761520987}
+  collider: {fileID: 5287553277712937254}
+  instantaneousPosMagic: {fileID: 1571252907250405568}
+  life: 100
+  die: 0
 --- !u!114 &5287553277712937255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,6 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controler: {fileID: 5287553277712937254}
+  healthScript: {fileID: 0}
   animPlayer: {fileID: 5202468900761520987}
   smoothAnimation: 10
   run: 0
@@ -806,7 +824,7 @@ MonoBehaviour:
   - {fileID: 7208542149646294319, guid: 9c48d2e801187764bbeedd5d6e42b5ca, type: 3}
   - {fileID: 3607847296516327597, guid: 987899c4428916740b01e686db23fa6e, type: 3}
   spearFX:
-  - {fileID: 0}
+  - {fileID: 6573583824151571802}
   defenseMagic: {fileID: 5923205413979113992}
   targetMask:
     serializedVersion: 2
@@ -817,23 +835,6 @@ MonoBehaviour:
   radius: 25
   angle: 30
   enemy: {fileID: 0}
---- !u!114 &860350332610512446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5289294330825902735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50b6ea334521436468d7a9f2d9bad432, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 5202468900761520987}
-  collider: {fileID: 5287553277712937254}
-  instantaneousPosMagic: {fileID: 1571252907250405568}
-  life: 0
-  die: 0
 --- !u!1 &5289399073443066069
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,7 +1199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1322692807415305411, guid: a28003fccd96ac34da5b100fa72e4ca6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1322692807430386693, guid: a28003fccd96ac34da5b100fa72e4ca6, type: 3}
       propertyPath: m_SortMode
@@ -1349,6 +1350,11 @@ PrefabInstance:
 --- !u!4 &6573583824151212410 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1322692807415269603, guid: a28003fccd96ac34da5b100fa72e4ca6, type: 3}
+  m_PrefabInstance: {fileID: 5287553279159105945}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6573583824151571802 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1322692807415305411, guid: a28003fccd96ac34da5b100fa72e4ca6, type: 3}
   m_PrefabInstance: {fileID: 5287553279159105945}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5287553279650035047

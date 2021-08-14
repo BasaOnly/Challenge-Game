@@ -47,6 +47,7 @@ public class CombatSystem : MonoBehaviour
     {
         if (scriptPlayer.canMove)
         {
+            animPlayer.SetLayerWeight(1, value ? 1 : 0.3f);
             defenseMagic.SetActive(value);
             animPlayer.SetBool("defend", value);
         }
